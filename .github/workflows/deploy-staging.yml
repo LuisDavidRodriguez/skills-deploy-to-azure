@@ -13,7 +13,7 @@ env:
   ###############################################
   ### Replace <username> with GitHub username ###
   ###############################################
-  DOCKER_IMAGE_NAME: ${{ github.actor }}-azure-ttt
+  DOCKER_IMAGE_NAME: luisdavidrodriguez-azure-ttt
   AZURE_WEBAPP_NAME: ${{ github.actor }}-ttt-app
   ###############################################
 
@@ -61,12 +61,18 @@ jobs:
           registry: ${{ env.IMAGE_REGISTRY_URL }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - id: repositoryToLower
+        uses: ASzc/change-string-case-action@v6
+        with:
+          # The input string
+          string: ${{ github.repository }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{env.IMAGE_REGISTRY_URL}}/${{ github.repository }}/${{env.DOCKER_IMAGE_NAME}}
+          images: ${{env.IMAGE_REGISTRY_URL}}/${{ steps.repositoryToLower.outputs.lowercase }}/${{env.DOCKER_IMAGE_NAME}}
           tags: |
             type=sha,format=long,prefix=
 
@@ -83,6 +89,12 @@ jobs:
     needs: Build-Docker-Image
     name: Deploy app container to Azure
     steps:
+      - id: repositoryToLower
+        uses: ASzc/change-string-case-action@v6
+        with:
+          # The input string
+          string: ${{ github.repository }}
+  
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
@@ -98,7 +110,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{env.AZURE_WEBAPP_NAME}}
-          images: ${{env.IMAGE_REGISTRY_URL}}/${{ github.repository }}/${{env.DOCKER_IMAGE_NAME}}:${{ github.sha }}
+          images: ${{env.IMAGE_REGISTRY_URL}}/${{ steps.repositoryToLower.outputs.lowercase }}/${{env.DOCKER_IMAGE_NAME}}:${{ github.sha }}
 
       - name: Azure logout via Azure CLI
         uses: azure/CLI@v1
