@@ -16,7 +16,7 @@ env:
 
 jobs:
   print:
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
     steps:
       - name: print environment variable to verify user name
         run: echo "::debug::This is the name ${{env.AZURE_WEBAPP_NAME}}"
