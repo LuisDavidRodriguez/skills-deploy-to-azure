@@ -12,9 +12,15 @@ env:
   ###############################################
   ### Replace <username> with GitHub username ###
   ###############################################
-  AZURE_WEBAPP_NAME: ${{LuisDavidRodriguez}}-ttt-app
+  AZURE_WEBAPP_NAME: ${{github.actor}}-ttt-app
 
 jobs:
+  print:
+    runs-on: ubunto-latest
+    steps:
+      - name: print environment variable to verify user name
+        run: echo "::debug::This is the name ${{env.AZURE_WEBAPP_NAME}}"
+        
   setup-up-azure-resources:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'spin up environment')
