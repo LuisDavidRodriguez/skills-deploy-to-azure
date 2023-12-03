@@ -21,7 +21,7 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - name: print environment variable to verify user name
+      - name: print the environment variable to verify user name
         run: echo "::debug::This is the name ${{env.DOCKER_IMAGE_NAME}}"
 
   build:
