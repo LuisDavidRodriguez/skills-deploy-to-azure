@@ -18,6 +18,12 @@ env:
   ###############################################
 
 jobs:
+  print:
+    runs-on: ubunto-latest
+    steps:
+      - name: print environment variable to verify user name
+        run: echo "::debug::This is the name ${{env.DOCKER_IMAGE_NAME}}"
+        
   build:
     runs-on: ubunto-latest
     if: contains(github.event.pull_request.labels.*.name, 'stage')
