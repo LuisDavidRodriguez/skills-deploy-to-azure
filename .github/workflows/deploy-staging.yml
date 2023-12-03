@@ -25,7 +25,7 @@ jobs:
         run: echo "::debug::This is the name ${{env.DOCKER_IMAGE_NAME}}"
 
   build:
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'stage')
     steps:
       - uses: actions/checkout@v3
